@@ -18,10 +18,12 @@ class VideoItem(scrapy.Item):
     # 评分
     score = scrapy.Field()
     # 主演
-    starts = scrapy.Field()
+    stars = scrapy.Field()
     # 播放量
     hot = scrapy.Field()
     # 播放地址
     play_url = scrapy.Field()
+    # 图片
+    img = scrapy.Field()
 
     # pass

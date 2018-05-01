@@ -24,18 +24,20 @@ class TencentSpider(scrapy.Spider):
                 short_desc = node.xpath(".//span[@class ='figure_info']/text()").extract()[0]
             else:
                 short_desc = ''
-            starts_text = node.xpath(".//div[@class='figure_desc']/a/text()").extract()
-            starts = ','.join(starts_text)
+            stars_text = node.xpath(".//div[@class='figure_desc']/a/text()").extract()
+            stars = ','.join(stars_text)
             hot = node.xpath(".//span[@class='num']/text()").extract()[0]
             play_url = node.xpath(".//a/@href").extract()[0]
+            img = node.xpath(".//img/@r-lazyload").extract()[0]
 
             item['name'] = name
             item['name']
             item['short_desc'] = short_desc
             item['score'] = score
-            item['starts'] = starts
+            item['stars'] = stars
             item['hot'] = hot
             item['play_url'] = play_url
+            item['img'] = img
             yield item
 
         if self.offset < self.total_page - 1:
