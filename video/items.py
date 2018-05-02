@@ -25,5 +25,14 @@ class VideoItem(scrapy.Item):
     play_url = scrapy.Field()
     # 图片
     img = scrapy.Field()
+    # 别名
+    alias = scrapy.Field()
+    # 导演
+    director = scrapy.Field()
+    # tag
+    tags = scrapy.Field()
+    # 简介
+    description = scrapy.Field()
+    # 播放时间
+    play_time = scrapy.Field()
 
-    # pass

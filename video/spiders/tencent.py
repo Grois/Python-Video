@@ -29,7 +29,6 @@ class TencentSpider(scrapy.Spider):
             hot = node.xpath(".//span[@class='num']/text()").extract()[0]
             play_url = node.xpath(".//a/@href").extract()[0]
             img = node.xpath(".//img/@r-lazyload").extract()[0]
-
             item['name'] = name
             item['name']
             item['short_desc'] = short_desc
@@ -38,9 +37,40 @@ class TencentSpider(scrapy.Spider):
             item['hot'] = hot
             item['play_url'] = play_url
             item['img'] = img
-            yield item
-
+            request = scrapy.Request(url=play_url, callback=self.get_detail)
+            request.meta['item'] = item
+            yield request
+            # break
         if self.offset < self.total_page - 1:
             self.offset += 1
             url = self.base_url + str(self.offset * 30)
             yield scrapy.Request(url, callback=self.parse)
+
+    def get_detail(self, response):
+        item = response.meta['item']
+        alias_text = response.xpath("//h1/span/text()")
+        if len(alias_text) == 1:
+            alias = alias_text.extract()[0]
+        else:
+            alias = ''
+
+        description = response.xpath("//p[@class='summary']/text()").extract()[0]
+
+        tags_text = response.xpath("//div[@class='video_tags _video_tags']/a/text()").extract()
+        if len(tags_text):
+            tags = ','.join(tags_text)
+        else:
+            tags = ''
+
+        play_time = response.xpath("//div[@class='figure_count']/span[@class='num']/text()").extract_first()
+        director_list = response.xpath("//div[@class='director']/a/node()").extract()
+        stars_list = [x for x in item['stars'].split(',')]
+        director_list = [item for item in director_list if item not in stars_list]
+        director = ','.join(director_list)
+
+        item['director'] = director
+        item['alias'] = alias
+        item['tags'] = tags
+        item['description'] = description
+        item['play_time'] = play_time
+        yield item
