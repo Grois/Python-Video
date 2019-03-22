@@ -30,7 +30,6 @@ class TencentSpider(scrapy.Spider):
             play_url = node.xpath(".//a/@href").extract()[0]
             img = node.xpath(".//img/@r-lazyload").extract()[0]
             item['name'] = name
-            item['name']
             item['short_desc'] = short_desc
             item['score'] = score
             item['stars'] = stars
